@@ -1,0 +1,84 @@
+//Name:- Sharwari Kapse
+//Roll_No:-22 
+#include<stdio.h>
+#define MAX 5
+
+int stack[MAX];
+int top = -1;
+
+void push(int value) {
+  if(top == MAX-1) {
+    printf("\nStack is overflow");
+  }
+  else {
+    top++;
+    stack[top] = value;
+    printf("\n%d push into stack", value);
+  }
+}
+
+void pop() {
+  if(top == -1) {
+    printf("\nStack is underflow");
+  }
+  else {
+    printf("\n%d pop from stack", stack[top]);
+    top--;
+  }  
+}
+
+void display() {
+  if(top == -1) {
+    printf("\nStack is underflow");
+  }
+  else {
+    printf("\nElement in Stack are: ");
+    for(int i=0; i<MAX; i++) {
+      printf("\n%d",stack[i]);
+    }
+  }
+}
+
+void peek() {
+  if(top == -1) {
+    printf("\nStack is underflow");
+  }
+  else {
+    printf("\n%d is the top element", stack[top]);
+  }
+}
+
+int main() {
+  int ch , value;
+  while(1) {
+    printf("\n1. Push \n2. Pop \n3. Display \n4. Peek \n5. Exit");
+    scanf("%d",&ch);
+
+    switch(ch) {
+      case 1:
+      printf("nEnter the value to be inserted");
+      scanf("%d",&value);
+      push(value);
+      break;
+
+      case 2:
+      pop();
+      break;
+
+      case 3:
+      display();
+      break;
+
+      case 4:
+      peek();
+      break;
+
+      case 5:
+      printf("\nExiting...");
+      return 0;
+
+      default:
+      printf("\nEntered choice is incorrect...");
+    }
+  }
+}
