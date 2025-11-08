@@ -1,0 +1,109 @@
+//Name:- Sharwari Kapse
+Roll_No:- A-22
+#include<stdio.h>
+#include<string.h>
+#define MAX 20
+
+int isopd (char c) {
+  if(c >= 'a' && c <= 'z') {
+    return 1;
+  }
+  else 
+    return 0;
+}
+
+int isopr (char c) {
+  if(c=='+' || c=='-' || c=='*' || c=='/' || c=='^')
+  {
+    return 1;
+  }
+  else
+    return 0;
+}
+
+int priority(char c) 
+{
+  if(c=='^')
+    return 3;
+  else if (c == '/' || c=='*')
+    return 2;
+  else if (c == '+' || c == '-')
+    return 1;
+  else
+    return 0;
+} 
+
+void reverse(char str[]) {
+  int len = strlen(str);
+  char temp;
+  for(int i=0; i<len/2; i++){
+    temp = str[i];
+    str[i] = str[len-i-1];
+    str[len-i-1] = temp;
+  } 
+  for(int i=0; i<len; i++) {
+    if(str[i]=='(')
+    str[i]=')';
+    else if(str[i]==')') 
+    str[i] = '(';
+  }
+}
+
+int main() 
+{
+  char infix[30] , prefix[30];
+  char stk[MAX],ch;
+  int top=-1, i, j=0;
+
+  printf("Enter the infix experation:");
+  scanf("%s", infix);
+  reverse(infix);
+  i=0;
+  while (infix[i] != '\0')
+  {
+    ch = infix[i];
+    // printf("\n Char at position %d is %c", i,ch);
+    if(ch == '(') {
+       stk[++top]=ch;
+    }
+
+    else if (isopd(ch))
+    {
+      prefix[j++] = ch;
+    }
+
+    else if (isopr(ch)) 
+    {
+      while(top != -1 && isopr(stk[top]) && priority(stk[top]) > priority(ch) ) {
+        prefix[j++] = stk[top--];
+      }
+        top++;
+        stk[top] = ch;
+      
+    }
+
+    else if(ch==')')
+    {
+      while (stk[top] != '(')
+      {
+        prefix[j] = stk[top];
+        top--;
+        j++;
+      }
+      top--;
+    }
+    i++;
+  }
+
+  while (top!= -1) {
+    prefix[j++] = stk[top--];
+  }
+  
+  prefix[j] = '\0';
+
+  reverse(prefix);
+
+  printf("\n Prefix Expression %s", prefix);
+
+  return 0;
+}
