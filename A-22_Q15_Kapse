@@ -1,15 +1,16 @@
 //Name:- Sharwari Kapse
 //Roll_No:- A-22
+
+//Name:- Sharwari Kapse
+//Roll_No:- A-22
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure for BST node
 typedef struct node {
     int data;
     struct node *left, *right;
 } *BST;
 
-// Function to create a new node
 BST getNode(int val) {
     BST newNode = (BST)malloc(sizeof(struct node));
     newNode->data = val;
@@ -17,7 +18,6 @@ BST getNode(int val) {
     return newNode;
 }
 
-// Function to insert a node in BST
 BST insert(BST root, int val) {
     if (root == NULL)
         return getNode(val);
@@ -28,9 +28,8 @@ BST insert(BST root, int val) {
         root->right = insert(root->right, val);
     
     return root;
-}
 
-// Inorder traversal (for checking)
+
 void inorder(BST root) {
     if (root != NULL) {
         inorder(root->left);
@@ -39,20 +38,16 @@ void inorder(BST root) {
     }
 }
 
-// Function to print all nodes within a given range [low, high]
 void printRange(BST root, int low, int high) {
     if (root == NULL)
         return;
 
-    // If current node is greater than low, check left subtree
     if (root->data > low)
         printRange(root->left, low, high);
 
-    // If current node is within range, print it
     if (root->data >= low && root->data <= high)
         printf("%d ", root->data);
 
-    // If current node is smaller than high, check right subtree
     if (root->data < high)
         printRange(root->right, low, high);
 }
