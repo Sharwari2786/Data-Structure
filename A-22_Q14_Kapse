@@ -1,0 +1,271 @@
+//Name:- Sharwari Kapse
+//Roll_No:- A-22
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+    int data;
+    struct node *left, *right;
+} *BST;
+
+BST getNode(int val) {
+    BST newNode = (BST)malloc(sizeof(struct node));
+    newNode->data = val;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+BST insert(BST root, int val) {
+    if (root == NULL)
+        return getNode(val);
+    if (val < root->data)
+        root->left = insert(root->left, val);
+    else if (val > root->data)
+        root->right = insert(root->right, val);
+    return root;
+}
+
+void inorder(BST root) {
+    if (root) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+void preorder(BST root) {
+    if (root) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(BST root) {
+    if (root) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+void bfs(BST root) {
+    if (!root)
+        return;
+    BST queue[100];
+    int front = 0, rear = 0;
+    queue[rear++] = root;
+
+    while (front < rear) {
+        BST node = queue[front++];
+        printf("%d ", node->data);
+        if (node->left)
+            queue[rear++] = node->left;
+        if (node->right)
+            queue[rear++] = node->right;
+    }
+}
+
+void dfs(BST root) {
+    preorder(root);
+}
+
+void mirror(BST root) {
+    if (root == NULL)
+        return;
+    BST temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+    mirror(root->left);
+    mirror(root->right);
+}
+
+BST findParent(BST root, int key) {
+    if (root == NULL || root->data == key)
+        return NULL;
+    if ((root->left && root->left->data == key) ||
+        (root->right && root->right->data == key))
+        return root;
+    if (key < root->data)
+        return findParent(root->left, key);
+    else
+        return findParent(root->right, key);
+}
+
+BST findNode(BST root, int key) {
+    if (!root)
+        return NULL;
+    if (root->data == key)
+        return root;
+    else if (key < root->data)
+        return findNode(root->left, key);
+    else
+        return findNode(root->right, key);
+}
+
+void printChildren(BST root, int key) {
+    BST node = findNode(root, key);
+    if (!node)
+        printf("Node not found.\n");
+    else {
+        printf("Children of %d: ", key);
+        if (node->left)
+            printf("%d ", node->left->data);
+        if (node->right)
+            printf("%d ", node->right->data);
+        if (!node->left && !node->right)
+            printf("No children");
+        printf("\n");
+    }
+}
+
+void printSibling(BST root, int key) {
+    BST parent = findParent(root, key);
+    if (!parent)
+        printf("No sibling (root node or not found)\n");
+    else if (parent->left && parent->left->data == key && parent->right)
+        printf("Sibling of %d: %d\n", key, parent->right->data);
+    else if (parent->right && parent->right->data == key && parent->left)
+        printf("Sibling of %d: %d\n", key, parent->left->data);
+    else
+        printf("No sibling found for %d\n", key);
+}
+
+void printParent(BST root, int key) {
+    BST parent = findParent(root, key);
+    if (parent)
+        printf("Parent of %d: %d\n", key, parent->data);
+    else
+        printf("Parent not found (maybe root or missing)\n");
+}
+
+void printGrandParent(BST root, int key) {
+    BST parent = findParent(root, key);
+    if (parent) {
+        BST gp = findParent(root, parent->data);
+        if (gp)
+            printf("Grandparent of %d: %d\n", key, gp->data);
+        else
+            printf("No grandparent found for %d\n", key);
+    } else
+        printf("No parent found, so no grandparent\n");
+}
+
+void printUncle(BST root, int key) {
+    BST parent = findParent(root, key);
+    if (!parent) {
+        printf("No parent found, so no uncle\n");
+        return;
+    }
+    BST gp = findParent(root, parent->data);
+    if (!gp) {
+        printf("No grandparent, so no uncle\n");
+        return;
+    }
+
+    if (gp->left && gp->left->data == parent->data && gp->right)
+        printf("Uncle of %d: %d\n", key, gp->right->data);
+    else if (gp->right && gp->right->data == parent->data && gp->left)
+        printf("Uncle of %d: %d\n", key, gp->left->data);
+    else
+        printf("No uncle for %d\n", key);
+}
+
+int main() {
+    BST root = NULL;
+    int choice, val, key;
+    char cont;
+
+    do {
+        printf("\n----- BST Operations -----\n");
+        printf("1. Insert\n2. Inorder Traversal\n3. Preorder Traversal\n4. Postorder Traversal\n");
+        printf("5. BFS (Level Order)\n6. DFS (Preorder)\n7. Mirror Tree\n");
+        printf("8. Children of Node\n9. Sibling of Node\n10. Parent of Node\n");
+        printf("11. Grandparent of Node\n12. Uncle of Node\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &val);
+                root = insert(root, val);
+                printf("Node %d inserted.\n", val);
+                break;
+
+            case 2:
+                printf("Inorder: ");
+                inorder(root);
+                printf("\n");
+                break;
+
+            case 3:
+                printf("Preorder: ");
+                preorder(root);
+                printf("\n");
+                break;
+
+            case 4:
+                printf("Postorder: ");
+                postorder(root);
+                printf("\n");
+                break;
+
+            case 5:
+                printf("BFS (Level Order): ");
+                bfs(root);
+                printf("\n");
+                break;
+
+            case 6:
+                printf("DFS (Preorder): ");
+                dfs(root);
+                printf("\n");
+                break;
+
+            case 7:
+                mirror(root);
+                printf("Tree mirrored successfully!\n");
+                break;
+
+            case 8:
+                printf("Enter node value to find children: ");
+                scanf("%d", &key);
+                printChildren(root, key);
+                break;
+
+            case 9:
+                printf("Enter node value to find sibling: ");
+                scanf("%d", &key);
+                printSibling(root, key);
+                break;
+
+            case 10:
+                printf("Enter node value to find parent: ");
+                scanf("%d", &key);
+                printParent(root, key);
+                break;
+
+            case 11:
+                printf("Enter node value to find grandparent: ");
+                scanf("%d", &key);
+                printGrandParent(root, key);
+                break;
+
+            case 12:
+                printf("Enter node value to find uncle: ");
+                scanf("%d", &key);
+                printUncle(root, key);
+                break;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+
+        printf("\nDo you want to continue? (y/n): ");
+        scanf(" %c", &cont);
+    } while (cont == 'y' || cont == 'Y');
+
+    printf("Thank you!\n");
+    return 0;
+}
