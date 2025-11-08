@@ -1,0 +1,55 @@
+//Name:- Sharwari Kapse
+//Roll_No:- A-22
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 20
+
+int main() {
+    char Q[MAX];
+    int r=-1,f=0;
+    char ch,resp,res;
+
+    //insertion
+   
+    while(r < MAX-1) {
+        printf("\nEnter the character to be added('0' to stop)");
+        scanf("%c",&ch);
+        if(r == MAX -1){
+            printf("\nQueue is full...");
+        }
+        else {
+          if(ch=='0'){
+            break;
+          }
+
+          Q[++r]=ch;
+          printf("\n%c in inserted in Queue",ch);
+       }
+    }
+
+
+    //deletion
+    do{
+        if(f>r){
+          printf("\nQueue ic empty...."); 
+        }
+        else{
+          ch = Q[f++];
+          printf("\n%c is deleted from the Queue",ch);
+    }
+
+    printf("\nDo you want to continue Deletion:");
+    scanf(" %c",&resp);
+    }while(resp=='y'|| resp=='Y');
+    
+    //display
+     if (f <= r) {
+        printf("\nValues inserted are: ");
+        for (int i = f; i <= r; i++) {
+            printf("%c ", Q[i]);
+        }
+    } else {
+        printf("\nQueue is empty\n");
+    }
+    
+}
