@@ -1,0 +1,287 @@
+//Name:- Sharwari Kapse 
+//Roll_no:- A-22
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct singly_list {
+    int data;
+    struct singly_list *next;
+} *SLL;
+
+SLL getnode() {
+    SLL new1;
+    new1 = (SLL)malloc(sizeof(struct singly_list));
+    new1->next = NULL;
+    return new1;
+}
+
+int main() {
+    SLL head = NULL, temp, t1;
+    char resp, resp1;
+    int val, ch, count, flag, p, sum;
+
+    do {
+        printf("\n--- Singly Linked List Operations ---\n");
+        printf("1. Creation\n2. Display\n3. Insert at any position\n4. Deletion at any position\n");
+        printf("5. Sum of data\n6. Print Even Elements\n7. Print Odd Elements\n8. Middle Element\n9. Last Element\n");
+        printf("10. Reverse List\n11. Sort List\n12. Detect Loop\n13. Merge Two Lists\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            // 1️⃣ Creation
+            case 1:
+                do {
+                    if (head == NULL) {
+                        head = getnode();
+                        printf("Enter the value to be added: ");
+                        scanf("%d", &val);
+                        head->data = val;
+                        t1 = head;
+                    } else {
+                        temp = getnode();
+                        printf("Enter the value to be added: ");
+                        scanf("%d", &val);
+                        temp->data = val;
+                        t1->next = temp;
+                        t1 = temp;
+                    }
+                    printf("Do you want to continue creation? (y/n): ");
+                    scanf(" %c", &resp);
+                } while (resp == 'y' || resp == 'Y');
+                break;
+
+            // 2️⃣ Display
+            case 2:
+                t1 = head;
+                if (!t1)
+                    printf("List is empty\n");
+                else {
+                    while (t1 != NULL) {
+                        printf("%d -> ", t1->data);
+                        t1 = t1->next;
+                    }
+                    printf("NULL\n");
+                }
+                break;
+
+            // 3️⃣ Insertion at any position
+            case 3:
+                count = 1;
+                flag = 0;
+                temp = head;
+                printf("Enter the position for insertion: ");
+                scanf("%d", &p);
+
+                while (count < p - 1 && temp) {
+                    temp = temp->next;
+                    count++;
+                }
+                if (p != 1 && temp == NULL)
+                    flag = 1;
+
+                if (flag != 1) {
+                    t1 = getnode();
+                    printf("Enter the value for insertion: ");
+                    scanf("%d", &val);
+                    t1->data = val;
+
+                    if (p <= 1) {
+                        t1->next = head;
+                        head = t1;
+                    } else {
+                        t1->next = temp->next;
+                        temp->next = t1;
+                    }
+                } else {
+                    printf("Invalid position\n");
+                }
+                break;
+
+            // 4️⃣ Deletion at any position
+            case 4:
+                count = 1;
+                flag = 0;
+                temp = head;
+                printf("Enter the position for deletion: ");
+                scanf("%d", &p);
+
+                while (count < p - 1 && temp) {
+                    temp = temp->next;
+                    count++;
+                }
+                if (p != 1 && temp == NULL)
+                    flag = 1;
+
+                if (flag != 1) {
+                    if (p <= 1) {
+                        t1 = head;
+                        head = head->next;
+                        free(t1);
+                    } else {
+                        t1 = temp->next;
+                        temp->next = temp->next->next;
+                        free(t1);
+                    }
+                } else {
+                    printf("Invalid position\n");
+                }
+                break;
+
+            // 5️⃣ Sum of Elements
+            case 5:
+                sum = 0;
+                temp = head;
+                while (temp) {
+                    sum += temp->data;
+                    temp = temp->next;
+                }
+                printf("Sum of all elements = %d\n", sum);
+                break;
+
+            // 6️⃣ Print Even Elements
+            case 6:
+                temp = head;
+                printf("Even elements: ");
+                while (temp) {
+                    if (temp->data % 2 == 0)
+                        printf("%d ", temp->data);
+                    temp = temp->next;
+                }
+                printf("\n");
+                break;
+
+            // 7️⃣ Print Odd Elements
+            case 7:
+                temp = head;
+                printf("Odd elements: ");
+                while (temp) {
+                    if (temp->data % 2 != 0)
+                        printf("%d ", temp->data);
+                    temp = temp->next;
+                }
+                printf("\n");
+                break;
+
+            // 8️⃣ Middle Element
+            case 8:
+                temp = head;
+                t1 = head;
+                while (temp != NULL && temp->next != NULL) {
+                    temp = temp->next->next;
+                    t1 = t1->next;
+                }
+                if (t1)
+                    printf("Middle element is: %d\n", t1->data);
+                else
+                    printf("List is empty\n");
+                break;
+
+            // 9️⃣ Last Element
+            case 9:
+                temp = head;
+                if (!temp)
+                    printf("List is empty\n");
+                else {
+                    while (temp->next != NULL)
+                        temp = temp->next;
+                    printf("Last element is: %d\n", temp->data);
+                }
+                break;
+
+            // 🔟 Reverse the list
+            case 10: {
+                SLL prev = NULL, current = head, next = NULL;
+                while (current != NULL) {
+                    next = current->next;
+                    current->next = prev;
+                    prev = current;
+                    current = next;
+                }
+                head = prev;
+                printf("Linked list reversed successfully!\n");
+                break;
+            }
+
+            // 11️⃣ Sort the list
+            case 11: {
+                SLL i, j;
+                int tempData;
+                for (i = head; i != NULL; i = i->next) {
+                    for (j = i->next; j != NULL; j = j->next) {
+                        if (i->data > j->data) {
+                            tempData = i->data;
+                            i->data = j->data;
+                            j->data = tempData;
+                        }
+                    }
+                }
+                printf("Linked list sorted in ascending order!\n");
+                break;
+            }
+
+            // 12️⃣ Detect Loop
+            case 12: {
+                SLL slow = head, fast = head;
+                flag = 0;
+                while (fast && fast->next) {
+                    slow = slow->next;
+                    fast = fast->next->next;
+                    if (slow == fast) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag)
+                    printf("Loop detected in the linked list!\n");
+                else
+                    printf("No loop found in the linked list.\n");
+                break;
+            }
+
+            // 13️⃣ Merge Two Lists
+            case 13: {
+                SLL head2 = NULL, temp2 = NULL, newNode;
+                int val2;
+                char ans;
+
+                printf("Enter elements for second list:\n");
+                do {
+                    newNode = getnode();
+                    printf("Enter value: ");
+                    scanf("%d", &val2);
+                    newNode->data = val2;
+                    if (head2 == NULL)
+                        head2 = newNode;
+                    else
+                        temp2->next = newNode;
+                    temp2 = newNode;
+                    printf("Add more elements to second list? (y/n): ");
+                    scanf(" %c", &ans);
+                } while (ans == 'y' || ans == 'Y');
+
+                // Merge lists
+                if (head == NULL)
+                    head = head2;
+                else {
+                    temp = head;
+                    while (temp->next != NULL)
+                        temp = temp->next;
+                    temp->next = head2;
+                }
+                printf("Lists merged successfully!\n");
+                break;
+            }
+
+            default:
+                printf("Invalid choice!\n");
+        }
+
+        printf("\nDo you want to continue (y/n)? ");
+        scanf(" %c", &resp1);
+
+    } while (resp1 == 'y' || resp1 == 'Y');
+
+    printf("\nThank you!\n");
+    return 0;
+}
