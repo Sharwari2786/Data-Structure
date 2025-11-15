@@ -1,0 +1,62 @@
+//Name:- Sharwari Kapse
+//Roll_no:- A-22
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+int graph[MAX][MAX], visited[MAX], stack[MAX], top = -1;n;
+
+void push(int v) {
+    stack[++top] = v;
+}
+
+void topoSortDFS(int v) {
+    visited[v] = 1;
+
+    for (int i = 0; i < n; i++) {
+        if (graph[v][i] == 1 && visited[i] == 0) {
+            topoSortDFS(i);
+        }
+    }
+
+    push(v);
+}
+
+int main() {
+    int e;
+    int u, v;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter number of edges: ");
+    scanf("%d", &e);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            graph[i][j] = 0;
+        }
+        visited[i] = 0;
+    }
+
+    printf("Enter edges (u v) (directed):\n");
+    for (int i = 0; i < e; i++) {
+        scanf("%d %d", &u, &v);
+        graph[u][v] = 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (visited[i] == 0) {
+            topoSortDFS(i);
+        }
+    }
+
+    printf("\nTopological Order: ");
+    while (top != -1) {
+        printf("%d ", stack[top--]);
+    }
+
+    printf("\n");
+    return 0;
+}
