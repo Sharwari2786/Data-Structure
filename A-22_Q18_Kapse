@@ -1,0 +1,70 @@
+//Name:=Sharwari Kapse
+//Roll_no:- A-22
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define ALPHABET_SIZE 26
+ 
+typedef struct TrieNode {
+    struct TrieNode *children[ALPHABET_SIZE];
+    bool found;     
+} TrieNode;
+ 
+TrieNode* createNode() {
+    TrieNode* node = (TrieNode*)malloc(sizeof(TrieNode));
+    node->found = false;
+
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+        node->children[i] = NULL;
+
+    return node;
+}
+ 
+void insert(TrieNode* root, const char* key) {
+    TrieNode* word = root;    
+
+    for (int i = 0; key[i] != '\0'; i++) {
+        int index = key[i] - 'a';
+
+        if (word->children[index] == NULL)
+            word->children[index] = createNode();
+
+        word = word->children[index];
+    }
+
+    word->found = true;  
+}
+
+bool search(TrieNode* root, const char* key) {
+    TrieNode* word = root; 
+
+    for (int i = 0; key[i] != '\0'; i++) {
+        int index = key[i] - 'a';
+
+        if (word->children[index] == NULL)
+            return false;
+
+        word = word->children[index];
+    }
+
+    return word != NULL && word->found;
+}
+
+int main() {
+    TrieNode* root = createNode();
+
+    insert(root, "the");
+    insert(root, "a");
+    insert(root, "there");
+    insert(root, "answer");
+    insert(root, "any");
+    insert(root, "by");
+    insert(root, "bye");
+
+    printf("Searching for 'the': %s\n", search(root, "the") ? "Found" : "Not Found");
+    printf("Searching for 'these': %s\n", search(root, "these") ? "Found" : "Not Found");
+    printf("Searching for 'bye': %s\n", search(root, "bye") ? "Found" : "Not Found");
+
+    return 0;
+}
